@@ -141,6 +141,8 @@ body {
 <div class="copyright">© Pong PocoPoco Project</div>
 
 <script>
+const TEST_MODE = true;
+  
 const CLOSED_IMG = "https://i.imgur.com/AexeOyV.png";  // 처음 이미지
 const OPEN_IMG   = "https://i.imgur.com/5W1hMkk.png";  // 클릭 후 이미지
 
@@ -223,7 +225,7 @@ function drawFortune() {
   const today = getToday();
   const lastDate = localStorage.getItem("lastDrawDate");
 
-  if (lastDate === today) {
+  if (!TEST_MODE && lastDate === today) {
     alert("오늘의 운세를 이미 확인했어요.");
     return;
   }
@@ -232,9 +234,10 @@ function drawFortune() {
 
   const result = weightedRandom(fortunes);
 
-  localStorage.setItem("lastDrawDate", today);
-  localStorage.setItem("lastDrawImg", result.img);
-
+   if (!TEST_MODE) {
+    localStorage.setItem("lastDrawDate", today);
+    localStorage.setItem("lastDrawImg", result.img);
+  }
   showResult(result);
 }
 
@@ -269,11 +272,11 @@ window.onload = function() {
   const savedDate = localStorage.getItem("lastDrawDate");
   const savedImg = localStorage.getItem("lastDrawImg");
 
-  if (savedDate === today && savedImg) {
+  if (!TEST_MODE && savedDate === today && savedImg) {
     document.getElementById("drawImage").src = OPEN_IMG;
     showResult({ img: savedImg });
     document.getElementById("notice").innerText =
-      "오늘의 운세를 이미 확인했어요. 🙂\n자정 이후 다시 확인할 수 있어요!";
+      "오늘의 운세를 이미 확인했어요.\n자정 이후 다시 확인할 수 있어요!";
   }
 };
 </script>
