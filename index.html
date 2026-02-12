@@ -235,7 +235,7 @@ function spawnGloom() {
   for (let i = 0; i < 18; i++) {
 
     const drop = document.createElement("img");
-    drop.src = "https://i.imgur.com/ZIwQ4ey.png;
+    drop.src = "https://i.imgur.com/ZIwQ4ey.png";
     drop.className = "rain-img";
 
     /* ⭐ 이미지 영역 기준 랜덤 위치 */
@@ -263,10 +263,9 @@ function spawnGloom() {
 
 function drawFortune() {
   const today = getToday();
-  const lastDate = localStorage.getItem("lastDrawDate");
 
-  if (!TEST_MODE && lastDate === today) {
-    alert("오늘의 운세를 이미 확인했어요.");
+  if (!TEST_MODE && localStorage.getItem("lastDrawDate") === today) {
+    alert("오늘의 운세를 이미 확인했어요.\n자정 이후 다시 열 수 있어요!");
     return;
   }
 
@@ -274,12 +273,14 @@ function drawFortune() {
 
   const result = weightedRandom(fortunes);
 
-if (!TEST_MODE) {
-  localStorage.setItem("lastDrawDate", today);
-  localStorage.setItem("lastDrawImg", result.img);
-}
+  if (!TEST_MODE) {
+    localStorage.setItem("lastDrawDate", today);
+    localStorage.setItem("lastDrawImg", result.img);
+  }
+
   showResult(result);
 }
+
 
 function showResult(result) {
   const box = document.getElementById("resultBox");
