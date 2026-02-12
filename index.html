@@ -44,43 +44,31 @@ body {
   z-index: 2;
 }
 
-/* 팝 */
+/* 팝 애니메이션 */
 @keyframes pop {
   0% { opacity: 0; transform: scale(0.85); }
   100% { opacity: 1; transform: scale(1); }
 }
 .pop { animation: pop 0.35s ease-out; }
 
-/* 🍀 네잎클로버 팡 효과 */
-.clover-burst {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 3;
-}
-
+/* 🍀 클로버 팡 */
 .clover {
   position: absolute;
-  font-size: 26px;
-  opacity: 0;
-  animation: cloverPop 900ms ease-out forwards;
+  font-size: 22px;
+  color: #FFD84D;
+  animation: cloverFly 1.2s ease-out forwards;
+  pointer-events: none;
+  z-index: 5;
 }
 
-@keyframes cloverPop {
-  0% {
-    transform: translate(-50%, -50%) scale(0.3);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
+@keyframes cloverFly {
+  0% { opacity: 0; transform: translate(0,0) scale(0.4); }
+  30% { opacity: 1; }
   100% {
-    transform: translate(var(--x), var(--y)) scale(1.2);
     opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(1.2);
   }
 }
-
 
 /* 🌧 우울 효과 */
 .gloom {
@@ -138,11 +126,10 @@ body {
 
 <div class="title-image">
   <img id="drawImage"
-       src="https://i.imgur.com/A_IMAGE.png"
+       src="https://i.imgur.com/kjTteM1.png"
        onclick="drawFortune()">
 </div>
 
-<div class="notice" id="notice">오늘의 퐁츈쿠키를 열어보세요!</div>
 
 <div class="result" id="resultBox">
   <div class="image-box" id="imageBox">
@@ -150,13 +137,11 @@ body {
   </div>
 </div>
 
-<div class="copyright">© Pong PocoPoco Project</div>
+<div class="copyright">© Pong Fortune Cookie</div>
 
 <script>
-const TEST_MODE = true;
-  
-const CLOSED_IMG = "https://i.imgur.com/kjTteM1.png";  // 처음 이미지
-const OPEN_IMG   = "https://i.imgur.com/5W1hMkk.png";  // 클릭 후 이미지
+const CLOSED_IMG = "https://i.imgur.com/kjTteM1.png";
+const OPEN_IMG   = "https://i.imgur.com/5W1hMkk.png";
 
 const fortunes = [
   { img:"https://i.imgur.com/mok45tF.png", weight: 40 },
@@ -164,8 +149,9 @@ const fortunes = [
   { img:"https://i.imgur.com/J5NLrN7.png", weight: 40 },
   { img:"https://i.imgur.com/eEiQVM9.png", weight: 40 },
 
-  { img:"https://i.imgur.com/QFMg7Jk.png", weight: 50, star:true },   // ⭐ 희귀
+  { img:"https://i.imgur.com/QFMg7Jk.png", weight: 50, clover:true },   // ⭐ 희귀
   { img:"https://i.imgur.com/I0SVaI0.png", weight: 50, gloom:true }   // 🌧 희귀
+
 ];
 
 function getToday() {
@@ -197,24 +183,27 @@ function getTimeUntilMidnight() {
   return `${h}:${m}:${s}`;
 }
 
-function spawnStars() {
+/* 🍀 클로버 생성 */
+function spawnClovers() {
   const box = document.getElementById("imageBox");
+
   for (let i = 0; i < 14; i++) {
-    const star = document.createElement("div");
-    star.className = "star";
-    star.innerText = "★";
+    const clover = document.createElement("div");
+    clover.className = "clover";
+    clover.innerText = "🍀";
 
     const angle = Math.random() * Math.PI * 2;
     const radius = 120 + Math.random() * 60;
 
-    star.style.setProperty("--x", Math.cos(angle) * radius + "px");
-    star.style.setProperty("--y", Math.sin(angle) * radius + "px");
+    clover.style.setProperty("--x", Math.cos(angle) * radius + "px");
+    clover.style.setProperty("--y", Math.sin(angle) * radius + "px");
 
-    box.appendChild(star);
-    setTimeout(() => star.remove(), 1200);
+    box.appendChild(clover);
+    setTimeout(() => clover.remove(), 1200);
   }
 }
 
+/* 🌧 우울 효과 */
 function spawnGloom() {
   const box = document.getElementById("imageBox");
 
@@ -237,7 +226,7 @@ function drawFortune() {
   const today = getToday();
   const lastDate = localStorage.getItem("lastDrawDate");
 
-  if (!TEST_MODE && lastDate === today) {
+  if (lastDate === today) {
     alert("오늘의 운세를 이미 확인했어요.");
     return;
   }
@@ -246,10 +235,9 @@ function drawFortune() {
 
   const result = weightedRandom(fortunes);
 
-   if (!TEST_MODE) {
-    localStorage.setItem("lastDrawDate", today);
-    localStorage.setItem("lastDrawImg", result.img);
-  }
+  localStorage.setItem("lastDrawDate", today);
+  localStorage.setItem("lastDrawImg", result.img);
+
   showResult(result);
 }
 
@@ -264,7 +252,7 @@ function showResult(result) {
   void img.offsetWidth;
   img.classList.add("pop");
 
-  if (result.star) spawnStars();
+  if (result.clover) spawnClovers();
   if (result.gloom) spawnGloom();
 }
 
@@ -284,11 +272,11 @@ window.onload = function() {
   const savedDate = localStorage.getItem("lastDrawDate");
   const savedImg = localStorage.getItem("lastDrawImg");
 
-  if (!TEST_MODE && savedDate === today && savedImg) {
+  if (savedDate === today && savedImg) {
     document.getElementById("drawImage").src = OPEN_IMG;
     showResult({ img: savedImg });
     document.getElementById("notice").innerText =
-      "오늘의 운세를 이미 확인했어요.\n자정 이후 다시 확인할 수 있어요!";
+      "오늘의 운세를 이미 확인했어요.\n자정 이후 다시 열 수 있어요!";
   }
 };
 </script>
