@@ -38,11 +38,14 @@ body {
 }
 .rain-layer {
   position: absolute;
-  inset: -20px;          /* 이미지보다 살짝 크게 */
-  overflow: hidden;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   pointer-events: none;
+  overflow: hidden;
   z-index: 4;
 }
+
 
 .image-box img {
   max-width: 100%;
@@ -229,35 +232,42 @@ function spawnClovers() {
   }
 }
 
-
-
 function spawnGloom() {
-  const layer = document.getElementById("rainLayer");
-  const width = layer.offsetWidth;
 
-  for (let i = 0; i < 18; i++) {
+  const img = document.getElementById("resultImage");
+  const layer = document.getElementById("rainLayer");
+
+  const w = img.offsetWidth + 100;
+  const h = img.offsetHeight + 100;
+
+  layer.style.width = w + "px";
+  layer.style.height = h + "px";
+
+  const width = w;
+
+  for (let i = 0; i < 22; i++) {
 
     const drop = document.createElement("img");
-    drop.src = "https://i.imgur.com/ZIwQ4ey.png"; 
+    drop.src = "https://i.imgur.com/ZIwQ4ey.png";
     drop.className = "rain-img";
 
-    const x = Math.random() * width;
-    drop.style.left = x + "px";
+    drop.style.left = Math.random() * width + "px";
 
     const scale = 0.7 + Math.random() * 0.6;
     drop.style.setProperty("--scale", scale);
 
-    const drift = (Math.random() - 0.5) * 50 + "px";
+    const drift = (Math.random() - 0.5) * 60 + "px";
     drop.style.setProperty("--drift", drift);
 
-    const dur = (0.9 + Math.random() * 0.8) + "s";
+    const dur = (0.9 + Math.random() * 0.9) + "s";
     drop.style.setProperty("--dur", dur);
 
     layer.appendChild(drop);
 
-    setTimeout(() => drop.remove(), 1700);
+    setTimeout(() => drop.remove(), 1800);
   }
 }
+
 
 
 
