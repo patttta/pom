@@ -51,24 +51,36 @@ body {
 }
 .pop { animation: pop 0.35s ease-out; }
 
-/* ⭐ 노란 별 팡 */
-.star {
+/* 🍀 네잎클로버 팡 효과 */
+.clover-burst {
   position: absolute;
-  font-size: 22px;
-  color: #FFD84D;
-  animation: starFly 1.2s ease-out forwards;
+  inset: 0;
   pointer-events: none;
-  z-index: 5;
+  overflow: hidden;
+  z-index: 3;
 }
 
-@keyframes starFly {
-  0% { opacity: 0; transform: translate(0,0) scale(0.4); }
-  30% { opacity: 1; }
-  100% {
+.clover {
+  position: absolute;
+  font-size: 26px;
+  opacity: 0;
+  animation: cloverPop 900ms ease-out forwards;
+}
+
+@keyframes cloverPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
     opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
     transform: translate(var(--x), var(--y)) scale(1.2);
+    opacity: 0;
   }
 }
+
 
 /* 🌧 우울 효과 */
 .gloom {
