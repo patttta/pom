@@ -36,6 +36,13 @@ body {
   justify-content: center;
   overflow: hidden;
 }
+.rain-layer {
+  position: absolute;
+  inset: -20px;          /* 이미지보다 살짝 크게 */
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 4;
+}
 
 .image-box img {
   max-width: 100%;
@@ -88,27 +95,23 @@ body {
 /* 🌧 이미지 주변 비 효과 */
 .rain-img {
   position: absolute;
-  top: -50px;
+  top: -40px;
   width: 22px;
-  pointer-events: none;
-  z-index: 6;
-
   animation: rainDrop var(--dur) linear forwards;
 }
 
 @keyframes rainDrop {
   0% {
     opacity: 0;
-    transform: translate(var(--drift), 0) scale(var(--scale));
+    transform: translateY(0) translateX(var(--drift)) scale(var(--scale));
   }
-  15% {
-    opacity: 1;
-  }
+  15% { opacity: 1; }
   100% {
     opacity: 0;
-    transform: translate(var(--drift), 320px) scale(var(--scale));
+    transform: translateY(320px) translateX(var(--drift)) scale(var(--scale);
   }
 }
+
 
 .info {
   margin: 15px 0;
@@ -150,8 +153,9 @@ body {
 
 <div class="result" id="resultBox">
   <div class="image-box" id="imageBox">
-    <img id="resultImage">
-  </div>
+  <div class="rain-layer" id="rainLayer"></div>
+  <img id="resultImage">
+</div>
 </div>
 
 <div class="copyright">© Pong Fortune Cookie</div>
@@ -228,37 +232,33 @@ function spawnClovers() {
 
 
 function spawnGloom() {
-  const box = document.getElementById("imageBox");
-
-  const boxWidth = box.offsetWidth;
+  const layer = document.getElementById("rainLayer");
+  const width = layer.offsetWidth;
 
   for (let i = 0; i < 18; i++) {
 
     const drop = document.createElement("img");
-    drop.src = "https://i.imgur.com/ZIwQ4ey.png";
+    drop.src = "https://i.imgur.com/ZIwQ4ey.png";   // ← 따옴표 누락 수정 필수
     drop.className = "rain-img";
 
-    /* ⭐ 이미지 영역 기준 랜덤 위치 */
-    const x = (Math.random() - 0.1) * boxWidth; 
+    const x = Math.random() * width;
     drop.style.left = x + "px";
 
-    /* ⭐ 랜덤 크기 */
-    const scale = 0.8 + Math.random() * 0.6;
+    const scale = 0.7 + Math.random() * 0.6;
     drop.style.setProperty("--scale", scale);
 
-    /* ⭐ 좌우 흔들림 */
-    const drift = (Math.random() - 0.5) * 40 + "px";
+    const drift = (Math.random() - 0.5) * 50 + "px";
     drop.style.setProperty("--drift", drift);
 
-    /* ⭐ 속도 랜덤 */
-    const dur = (0.8 + Math.random() * 0.7) + "s";
+    const dur = (0.9 + Math.random() * 0.8) + "s";
     drop.style.setProperty("--dur", dur);
 
-    box.appendChild(drop);
+    layer.appendChild(drop);
 
-    setTimeout(() => drop.remove(), 1500);
+    setTimeout(() => drop.remove(), 1700);
   }
 }
+
 
 
 function drawFortune() {
