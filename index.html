@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>퐁츈쿠키 뽑기</title>
+<title>퐁츈쿠키</title>
 
 <style>
 body {
@@ -11,7 +11,6 @@ body {
   padding: 60px;
 }
 
-.logo-wrap { margin-bottom: 20px; }
 .logo-wrap img {
   max-width: 350px;
   width: 100%;
@@ -22,7 +21,6 @@ body {
   max-width: 260px;
   width: 100%;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 .result {
@@ -32,7 +30,6 @@ body {
 
 .image-box {
   position: relative;
-  width: 100%;
   height: 260px;
   display: flex;
   align-items: center;
@@ -59,7 +56,7 @@ body {
   position: absolute;
   font-size: 22px;
   color: #FFD84D;
-  animation: starFly 1.3s ease-out forwards;
+  animation: starFly 1.2s ease-out forwards;
   pointer-events: none;
   z-index: 5;
 }
@@ -129,9 +126,11 @@ body {
 
 <div class="title-image">
   <img id="drawImage"
-       src="https://i.imgur.com/AexeOyV.png"
+       src="https://i.imgur.com/A_IMAGE.png"
        onclick="drawFortune()">
 </div>
+
+<div class="notice" id="notice">오늘의 퐁츈쿠키를 열어보세요!</div>
 
 <div class="result" id="resultBox">
   <div class="image-box" id="imageBox">
@@ -139,9 +138,12 @@ body {
   </div>
 </div>
 
-<div class="copyright">© Pong Fortune Cookie</div>
+<div class="copyright">© Pong PocoPoco Project</div>
 
 <script>
+const CLOSED_IMG = "https://i.imgur.com/AexeOyV.png";  // 처음 이미지
+const OPEN_IMG   = "https://i.imgur.com/5W1hMkk.png";  // 클릭 후 이미지
+
 const fortunes = [
   { img:"https://i.imgur.com/mok45tF.png", weight: 40 },
   { img:"https://i.imgur.com/yNAPL6o.png", weight: 40 },
@@ -195,7 +197,7 @@ function spawnStars() {
     star.style.setProperty("--y", Math.sin(angle) * radius + "px");
 
     box.appendChild(star);
-    setTimeout(() => star.remove(), 1300);
+    setTimeout(() => star.remove(), 1200);
   }
 }
 
@@ -205,7 +207,7 @@ function spawnGloom() {
   const overlay = document.createElement("div");
   overlay.className = "gloom";
   box.appendChild(overlay);
-  setTimeout(() => overlay.remove(), 1000);
+  setTimeout(() => overlay.remove(), 900);
 
   for (let i = 0; i < 12; i++) {
     const rain = document.createElement("div");
@@ -222,9 +224,11 @@ function drawFortune() {
   const lastDate = localStorage.getItem("lastDrawDate");
 
   if (lastDate === today) {
-    alert("오늘은 이미 쿠키를 열었어요 🙂");
+    alert("오늘의 운세를 이미 확인했어요.");
     return;
   }
+
+  document.getElementById("drawImage").src = OPEN_IMG;
 
   const result = weightedRandom(fortunes);
 
@@ -237,7 +241,6 @@ function drawFortune() {
 function showResult(result) {
   const box = document.getElementById("resultBox");
   const img = document.getElementById("resultImage");
-  const imageBox = document.getElementById("imageBox");
 
   box.style.display = "block";
   img.src = result.img;
@@ -255,7 +258,7 @@ function updateInfo() {
     "오늘 날짜 · " + getToday();
 
   document.getElementById("countdownText").innerText =
-    "다음 쿠키까지 · " + getTimeUntilMidnight();
+    "다음 쿠키까지 남은 시간· " + getTimeUntilMidnight();
 }
 
 window.onload = function() {
@@ -267,9 +270,10 @@ window.onload = function() {
   const savedImg = localStorage.getItem("lastDrawImg");
 
   if (savedDate === today && savedImg) {
+    document.getElementById("drawImage").src = OPEN_IMG;
     showResult({ img: savedImg });
     document.getElementById("notice").innerText =
-      "오늘 이미 쿠키를 열었어요 🙂\n자정 이후 다시 열 수 있어요!";
+      "오늘의 운세를 이미 확인했어요. 🙂\n자정 이후 다시 확인할 수 있어요!";
   }
 };
 </script>
