@@ -140,6 +140,7 @@ body {
 <div class="copyright">© Pong Fortune Cookie</div>
 
 <script>
+  const TEST_MODE = true;
 const CLOSED_IMG = "https://i.imgur.com/kjTteM1.png";
 const OPEN_IMG   = "https://i.imgur.com/5W1hMkk.png";
 
@@ -226,7 +227,7 @@ function drawFortune() {
   const today = getToday();
   const lastDate = localStorage.getItem("lastDrawDate");
 
-  if (lastDate === today) {
+  if (!TEST_MODE && lastDate === today) {
     alert("오늘의 운세를 이미 확인했어요.");
     return;
   }
@@ -235,9 +236,10 @@ function drawFortune() {
 
   const result = weightedRandom(fortunes);
 
+if (!TEST_MODE) {
   localStorage.setItem("lastDrawDate", today);
   localStorage.setItem("lastDrawImg", result.img);
-
+}
   showResult(result);
 }
 
@@ -272,7 +274,8 @@ window.onload = function() {
   const savedDate = localStorage.getItem("lastDrawDate");
   const savedImg = localStorage.getItem("lastDrawImg");
 
-  if (savedDate === today && savedImg) {
+  if (!TEST_MODE && savedDate === today && savedImg) {
+
     document.getElementById("drawImage").src = OPEN_IMG;
     showResult({ img: savedImg });
     document.getElementById("notice").innerText =
