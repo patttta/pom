@@ -54,11 +54,12 @@ body {
 /* 🍀 클로버 팡 */
 .clover {
   position: absolute;
-  width: 26px;
-  height: 26px;
+  width: 36px;
+  height: 36px;
   pointer-events: none;
   z-index: 5;
-  animation: starFly 1.2s ease-out forwards;
+
+  animation: cloverFly 0.9s ease-out forwards;
 }
 
 .clover img {
@@ -68,11 +69,19 @@ body {
 
 
 @keyframes cloverFly {
-  0% { opacity: 0; transform: translate(0,0) scale(0.4); }
-  30% { opacity: 1; }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  30% {
+    opacity: 1;
+  }
   100% {
     opacity: 0;
-    transform: translate(var(--x), var(--y)) scale(1.2);
+    transform:
+      translate(-50%, -50%)
+      translate(var(--tx), var(--ty))
+      scale(1.15);
   }
 }
 
@@ -206,25 +215,28 @@ const EFFECT_IMG = "https://i.imgur.com/pQEDgnW.png";
 function spawnClovers() {
   const box = document.getElementById("imageBox");
 
-  for (let i = 0; i < 14; i++) {
-    const el = document.createElement("div");
-    el.className = "clover";
-
-    const img = document.createElement("img");
-    img.src = EFFECT_IMG;
+  for (let i = 0; i < 12; i++) {
+    const c = document.createElement("img");
+    c.src = "여기에_네_클로버_이미지_URL";
+    c.className = "clover";
 
     const angle = Math.random() * Math.PI * 2;
-    const radius = 120 + Math.random() * 60;
+    const radius = 80 + Math.random() * 40;
 
-    el.style.setProperty("--x", Math.cos(angle) * radius + "px");
-    el.style.setProperty("--y", Math.sin(angle) * radius + "px");
+    const tx = Math.cos(angle) * radius;
+    const ty = Math.sin(angle) * radius;
 
-    el.appendChild(img);
-    box.appendChild(el);
+    c.style.left = "50%";
+    c.style.top = "50%";
+    c.style.setProperty("--tx", `${tx}px`);
+    c.style.setProperty("--ty", `${ty}px`);
 
-    setTimeout(() => el.remove(), 1200);
+    box.appendChild(c);
+
+    setTimeout(() => c.remove(), 900);
   }
 }
+
 
 
 /* 🌧 우울 효과 */
