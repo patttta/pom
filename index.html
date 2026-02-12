@@ -108,7 +108,7 @@ body {
   15% { opacity: 1; }
   100% {
     opacity: 0;
-    transform: translateY(320px) translateX(var(--drift)) scale(var(--scale);
+    transform: translateY(320px) translateX(var(--drift)) scale(var(--scale));
   }
 }
 
@@ -238,7 +238,7 @@ function spawnGloom() {
   for (let i = 0; i < 18; i++) {
 
     const drop = document.createElement("img");
-    drop.src = "https://i.imgur.com/ZIwQ4ey.png";   // ← 따옴표 누락 수정 필수
+    drop.src = "https://i.imgur.com/ZIwQ4ey.png"; 
     drop.className = "rain-img";
 
     const x = Math.random() * width;
